@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+<!--
+var params = "";
+var p = [];
+p['begin_datum']="25-10-2019";
+p['begin_tijd']="08:30";
+p['eind_datum']="25-10-2019";
+p['eind_tijd']="17:12";
+p['aantal_uur']="";
+p['toelichting']="";
+p['person_id']=0;
+p['empno']=0;
+p['verlof_type']="V";
+p['parafeerder']=0;
+p['user_id']=0;
+p['nids']=0;
+p['to_url']=0;
+p['locatie']=0;
+p['saldo_verlof']=0;
+p['saldo_atv']=0;
+p['stnd_uren']=0;
+p['pagina']=0;
+
+var aanvragenverstuurd=0;
+
+// Get user specific variables
+var http = new XMLHttpRequest();
+var urlget = "http://verlof/";
+http.open('GET', urlget, true);
+http.onreadystatechange = function() {//Call a function when the state changes.
+    if(http.readyState == 4 && http.status == 200) {
+        document.getElementById('response').innerHTML = http.responseText;
+		
+		//setTimeout(function(){
+			// get variables for post
+			p['pagina'] 	= document.querySelector("#response input[name='pagina']").value;
+			p['person_id'] 	= document.querySelector("#response input[name='person_id']").value;
+			p['empno'] 		= document.querySelector("#response input[name='empno']").value;
+			p['parafeerder']= document.getElementById("parafeerder").value;
+			p['user_id']	= document.querySelector("#response input[name='user_id']").value;
+			p['nids']		= document.querySelector("#response input[name='nids']").value;
+			p['to_url']		= document.querySelector("#response input[name='to_url']").value;
+			p['locatie']	= document.querySelector("#response input[name='locatie']").value;
+			p['saldo_verlof']=document.querySelector("#response input[name='saldo_verlof']").value;
+			p['saldo_atv']	= document.querySelector("#response input[name='saldo_atv']").value;
+			p['stnd_uren']	= document.querySelector("#response input[name='stnd_uren']").value;
+			
+			/*for (var key in p){
+				params += encodeURIComponent( key + "=" + p[key] + "&" );
+			}
+			params = params.substring(0, params.length - 1);
+			document.getElementById('input').innerHTML = params;*/
+		//}, 1);
+		
+	}
+}
+http.send();
+
+aanvragenverstuurd=0;
+function stuurAanvraag(){
+	var url = 'http://verlof/v1.1/VerlofSubmit.php';
+	params = "";
+	for (var key in p){
+		//params += encodeURIComponent( key + "=" + p[key] + "&" );
+		params +=  key + "=" + p[key] + "&" ;
+	}
+	params = params.substring(0, params.length - 1);
+	http.open('POST', url, true);
+	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	http.send(params);
+}
+//setTimeout(stuurAanvraag(), 500);
+//-->
+</script>
+<style type="text/css">
+<!--
+#input{
+	height: 15em;
+	background-color: #DDD;
+	top:0;
+	left:0;
+	right:0;
+	position:absolute;
+}
+#response{
+   overflow-x:auto;
+   top:15em;  /* as the height of the other div is 30px */
+   left:0;
+   right:0;
+   bottom:0;
+   position:absolute;
+}
+//-->
+</style>
+<body>
+
+<div id="input"><a href="#" onclick="javascript:stuurAanvraag();">doe aanvraag</a></div>
+<div id="response">leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br></div>
+
+</body>
+</html>
