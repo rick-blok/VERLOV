@@ -90,25 +90,21 @@ function checkInputCalendar(){
 		verloven[j] = [];
 		if (e[i].value % 4 == 0){
 			//dag
-				 
-			if ( (j > 0 && verloven[j-1]["type"] == "verlof dag" && i > 0 && e[i-1].value == "8" ) || 
-				 (j > 0 && verloven[j-1]["type"] == "verlof dag" && i > 0 && e[i-1].value == "4" && !( i > 1 && ( e[i-2].value == "4" || e[i-2].value == "8") ) ) ){
+			if ( (j > 0 && verloven[j-1]["type"] == "verlof dag" && verloven[j-1]["eindt"] == "17:12" ) ){
 				// ga verder met de vorige
-				// ga verder als de voorgaande halve dag niet bij een aanvraag daarvoor hoort
 				verloven[j-1]["eind"] = e[i].name;
 				verloven[j-1]["eindt"] = e[i].value == 4 ? "12:30" : "17:12";
-				verloven[j-1]["aantal"] = e[i].value;
+				verloven[j-1]["aantal"] += e[i].value;
 				verloven.pop();
 			} else {
 				// nieuwe aanvraag
 				verloven[j]["start"] = e[i].name;
-				verloven[j]["startt"] = e[i].value == 4? "13:12" : "8:30";
+				verloven[j]["startt"] = e[i].value == 4 ? "13:12" : "8:30";
 				verloven[j]["eind"] = e[i].name;
 				verloven[j]["eindt"] = "17:12";
 				verloven[j]["type"] = "verlof dag";
 				verloven[j]["aantal"] = e[i].value;
 			}
-			
 		} else{
 			//uren
 			verloven[j]["start"] = e[i].name;
@@ -156,7 +152,7 @@ function checkInputCalendar(){
 }
 #wrapper {
 	display: table-cell;
-	left:2em;
+	left:6em;
 	right:2em;
 	background-color:red;
 	overflow-x: auto;
@@ -164,8 +160,7 @@ function checkInputCalendar(){
 }
 #verlof, #ATV{
 	display: table-row;
-	
-	left:2em;
+	left:6em;
 	right:2em;
 	background-color:red;
 	overflow-x: auto;
@@ -185,6 +180,15 @@ function checkInputCalendar(){
 	padding: 0;
 	margin: 0;
 }
+#labels{
+	display: table-cell;
+	left:2em;
+	width: 4em;
+}
+.label{
+	display: table-row;
+	width: 4em;
+}
 //-->
 </style>
 <body>
@@ -194,10 +198,14 @@ function checkInputCalendar(){
 		<div id="left">
 			<a href="#" onclick="javascript:addWeekBefore()">-</a>
 		</div>
+		<div id="labels">
+			<div class="label">&nbsp;</div>
+			<div class="label">Velof</div>
+			<div class="label">ATV</div>
+		</div>
 		<div id="wrapper">
 			<div id="header">
-				<div class="week">
-				</div>
+				
 				<div class="week">
 					<span>15-6</span>
 					<span>16-6</span>
@@ -228,9 +236,6 @@ function checkInputCalendar(){
 			</div>
 			<div id="verlof">
 				<div class="week">
-					Velof
-				</div>
-				<div class="week">
 					<input type="text" name="15-6-19">
 					<input type="text" name="16-6-19">
 					<input type="text" name="17-6-19">
@@ -253,9 +258,6 @@ function checkInputCalendar(){
 				</div>
 			</div>
 			<div id="ATV">
-				<div class="week">
-					ATV
-				</div>
 				<div class="week">
 					<input type="text">
 					<input type="text">
