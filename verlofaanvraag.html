@@ -72,7 +72,55 @@ function stuurAanvraag(){
 	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	http.send(params);
 }
-//setTimeout(stuurAanvraag(), 500);
+
+var verloflijst="";
+var verloven = [];
+function checkInputCalendar(){
+	verloven = [];
+	var e = document.getElementById("verlof").getElementsByTagName('input');
+	for (var i = 0; i < e.length; i++){ 
+		// sanitize
+		if (!e[i].value.match(/^[1-8]{1}$/)){
+			e[i].value = "";
+			continue;
+		}
+
+		
+		var j = verloven.length;
+		verloven[j] = [];
+		if (e[i].value % 4 == 0){
+			//dag
+				 
+			if ( (j > 0 && verloven[j-1]["type"] == "verlof dag" && i > 0 && e[i-1].value == "8" ) || 
+				 (j > 0 && verloven[j-1]["type"] == "verlof dag" && i > 0 && e[i-1].value == "4" && !( i > 1 && ( e[i-2].value == "4" || e[i-2].value == "8") ) ) ){
+				// ga verder met de vorige
+				// ga verder als de voorgaande halve dag niet bij een aanvraag daarvoor hoort
+				verloven[j-1]["eind"] = e[i].name;
+				verloven[j-1]["eindt"] = e[i].value == 4 ? "12:30" : "17:12";
+				verloven[j-1]["aantal"] = e[i].value;
+				verloven.pop();
+			} else {
+				// nieuwe aanvraag
+				verloven[j]["start"] = e[i].name;
+				verloven[j]["startt"] = e[i].value == 4? "13:12" : "8:30";
+				verloven[j]["eind"] = e[i].name;
+				verloven[j]["eindt"] = "17:12";
+				verloven[j]["type"] = "verlof dag";
+				verloven[j]["aantal"] = e[i].value;
+			}
+			
+		} else{
+			//uren
+			verloven[j]["start"] = e[i].name;
+			verloven[j]["eind"] = e[i].name;
+			verloven[j]["type"] = "verlof uur";
+			verloven[j]["aantal"] = e[i].value;
+		}
+	}
+	
+	console.debug(verloven);
+}
+
 //-->
 </script>
 <style type="text/css">
@@ -93,11 +141,152 @@ function stuurAanvraag(){
    bottom:0;
    position:absolute;
 }
+#calendar{
+	display: table-row;
+}
+#left {
+	float:left;
+	display: table-cell;
+	width: 2em;
+}
+#right{
+	float: right;
+	display: table-cell;
+	width: 2em;
+}
+#wrapper {
+	display: table-cell;
+	left:2em;
+	right:2em;
+	background-color:red;
+	overflow-x: auto;
+	width: 100%;
+}
+#verlof, #ATV{
+	display: table-row;
+	
+	left:2em;
+	right:2em;
+	background-color:red;
+	overflow-x: auto;
+}
+#header .week span{
+	width: 2.1em;
+	display: table-cell;
+	text-align: center;
+}
+.week{
+	width: 15em;
+	display: table-cell;
+	background-color:#FFF;
+}
+.week input{
+	width:2em;
+	padding: 0;
+	margin: 0;
+}
 //-->
 </style>
 <body>
 
-<div id="input"><a href="#" onclick="javascript:stuurAanvraag();">doe aanvraag</a></div>
+<div id="input">
+	<div id="calendar">
+		<div id="left">
+			<a href="#" onclick="javascript:addWeekBefore()">-</a>
+		</div>
+		<div id="wrapper">
+			<div id="header">
+				<div class="week">
+				</div>
+				<div class="week">
+					<span>15-6</span>
+					<span>16-6</span>
+					<span>17-6</span>
+					<span>18-6</span>
+					<span>19-6</span>
+					<span>20-6</span>
+					<span>21-6</span>
+				</div>
+				<div class="week">
+					<span>22-6</span>
+					<span>23-6</span>
+					<span>24-6</span>
+					<span>25-6</span>
+					<span>26-6</span>
+					<span>27-6</span>
+					<span>28-6</span>
+				</div>
+				<div class="week">
+					<span>29-6</span>
+					<span>30-6</span>
+					<span>1-7</span>
+					<span>2-7</span>
+					<span>3-7</span>
+					<span>4-7</span>
+					<span>5-7</span>
+				</div>
+			</div>
+			<div id="verlof">
+				<div class="week">
+					Velof
+				</div>
+				<div class="week">
+					<input type="text" name="15-6-19">
+					<input type="text" name="16-6-19">
+					<input type="text" name="17-6-19">
+					<input type="text" name="18-6-19">
+					<input type="text" name="19-6-19">
+				</div>
+				<div class="week">
+					<input type="text" name="22-6-19">
+					<input type="text" name="23-6-19">
+					<input type="text" name="24-6-19">
+					<input type="text" name="25-6-19">
+					<input type="text" name="26-6-19">
+				</div>
+				<div class="week">
+					<input type="text" name="29-6-19">
+					<input type="text" name="30-6-19">
+					<input type="text" name="1-7-19">
+					<input type="text" name="2-7-19">
+					<input type="text" name="3-7-19">
+				</div>
+			</div>
+			<div id="ATV">
+				<div class="week">
+					ATV
+				</div>
+				<div class="week">
+					<input type="text">
+					<input type="text">
+					<input type="text">
+					<input type="text">
+					<input type="text">
+				</div>
+				<div class="week">
+					<input type="text">
+					<input type="text">
+					<input type="text">
+					<input type="text">
+					<input type="text">
+				</div>
+				<div class="week">
+					<input type="text">
+					<input type="text">
+					<input type="text">
+					<input type="text">
+					<input type="text">
+				</div>
+			</div>
+		</div>
+		<div id="right">
+			<a href="#" onclick="javascript:addWeekAfter()">+</a>
+		</div>
+	</div>
+
+	<a href="#" onclick="javascript:checkInputCalendar();">Check Input</a><br>
+	<a href="#" onclick="javascript:stuurAanvraag();">doe aanvraag</a>
+</div>
 <div id="response">leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br></div>
 
 </body>
