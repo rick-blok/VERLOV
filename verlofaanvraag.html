@@ -36,6 +36,8 @@ var types = {
 
 var aanvragenverstuurd=0;
 var startVersturen = false;
+var errorInInput = false;
+var continueOnError = false;
 var verloven = [];
 
 var weeksBeforeNow = 0;
@@ -66,17 +68,37 @@ http.onreadystatechange = function() {//Call a function when the state changes.
 			aanvragenverstuurd++;
 			stuurAanvraag(); //op naar de volgende
 		}
-	} else {
-		alert("er ging iets mis?");
+	} else if (http.readyState == 4){
+		alert("er ging iets mis? \n" + http.status);
 	}
 }
 http.send();
-aanvragenverstuurd=0; // eerste keer laden is voor variablen. 
 
 
 function stuurAanvraag(){
-	// stop content van verloven[i] in p[] als er nog 1 over is. 
-	// TODO
+	startVersturen = true;
+	checkInputCalendar();
+	
+	if (aanvragenverstuurd >= verloven.length){
+		//klaar!
+		errorInInput = false;
+		continueOnError = false;
+		startVersturen = false;
+		return;
+	}
+	
+	if (errorInInput && !continueOnError) {
+		if ( confirm("Er zijn fouten gevonden (rood gemarkeerd), deze worden genegeerd.\nVerder gaan?") ){
+			continueOnError = true;
+		} else {
+			startVersturen = false;
+			continueOnError = false;
+			return false;
+		}
+	}
+	
+	alert("versturen!");
+	//return false;
 	
 	var url = 'http://verlof/v1.1/VerlofSubmit.php';
 	params = "";
@@ -92,14 +114,17 @@ function stuurAanvraag(){
 
 function checkInputCalendar(){
 	verloven = [];
+	errorInInput = false;
 
 	for (var type in types){
 		var e = document.getElementById(type).getElementsByTagName('input');
 		for (var i = 0; i < e.length; i++){ 
 			// sanitize
 			if (!e[i].value.match(/^\d?(\.\d)?$/)){
-				if (e[i].value != "" )
+				if (e[i].value != "" ) {
 					e[i].classList.add("error"); 
+				}
+				errorInInput = true;
 				continue;	
 			} else if (e[i].value == "" )
 				continue
