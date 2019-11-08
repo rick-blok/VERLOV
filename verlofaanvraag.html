@@ -13,12 +13,12 @@ p['aantal_uur']="";
 p['toelichting']="";
 p['person_id']=0;
 p['empno']=0;
-p['verlof_type']="V";
+p['verlof_type']="";
 p['parafeerder']=0;
 p['user_id']=0;
 p['nids']=0;
 p['to_url']=0;
-p['locatie']=0;
+p['locatie']="";
 p['saldo_verlof']=0;
 p['saldo_atv']=0;
 p['stnd_uren']=0;
@@ -97,8 +97,12 @@ function stuurAanvraag(){
 		}
 	}
 	
-	alert("versturen!");
+	console.log("verstuur nr " + aanvragenverstuurd);
 	//return false;
+	for (var verlof in verloven[aanvragenverstuurd]){
+		p[verlof] = verloven[aanvragenverstuurd][verlof];
+	}
+	console.debug(p);
 	
 	var url = 'http://verlof/v1.1/VerlofSubmit.php';
 	params = "";
@@ -134,37 +138,42 @@ function checkInputCalendar(){
 			verloven[j] = [];
 			if (types[type][0] != "-" && Number(e[i].value) % 4 == 0){
 				//dag
-				if ( (j > 0 && verloven[j-1]["type"][0] == types[type][0] && verloven[j-1]["eindt"] == "17:12" ) ){
+				if ( (j > 0 && verloven[j-1]["verlof_type"][0] == types[type][0] && verloven[j-1]["eind_tijd"] == "17:12" ) ){
 					// ga verder met de vorige
-					verloven[j-1]["eind"] = e[i].name;
-					verloven[j-1]["eindt"] = Number(e[i].value) == 4 ? "12:30" : "17:12";
-					verloven[j-1]["aantal"] += Number(e[i].value);
+					verloven[j-1]["eind_datum"] = e[i].name;
+					verloven[j-1]["eind_tijd"] = Number(e[i].value) == 4 ? "12:30" : "17:12";
+					verloven[j-1]["aantal_uur"] = (Number(verloven[j-1]["aantal_uur"]) + Number(e[i].value)).toString();
 					verloven.pop();
 				} else {
 					// nieuwe aanvraag
-					verloven[j]["start"] = e[i].name;
-					verloven[j]["startt"] = Number(e[i].value) == 4 ? "13:12" : "8:30";
-					verloven[j]["eind"] = e[i].name;
-					verloven[j]["eindt"] = "17:12";
-					verloven[j]["type"] = types[type][0] + " " + type + " dag";
-					verloven[j]["aantal"] = Number(e[i].value);
+					verloven[j]["begin_datum"] = e[i].name;
+					verloven[j]["begin_tijd"] = Number(e[i].value) == 4 ? "13:12" : "08:30";
+					verloven[j]["eind_datum"] = e[i].name;
+					verloven[j]["eind_tijd"] = "17:12";
+					verloven[j]["verlof_type"] = types[type][0];
+					verloven[j]["verlof_naam"] = type + " dag";
+					verloven[j]["aantal_uur"] = e[i].value;
 				}
 			} else{
 				//uren
-				verloven[j]["start"] = e[i].name;
-				verloven[j]["eind"] = e[i].name;
-				verloven[j]["type"] = types[type][1] + " " + type + " uur";
-				verloven[j]["aantal"] = Number(e[i].value);
+				verloven[j]["begin_datum"] = e[i].name;
+				verloven[j]["begin_tijd"] = "08:30";
+				verloven[j]["eind_datum"] = e[i].name;
+				verloven[j]["eind_tijd"] = "17:12";
+				verloven[j]["verlof_type"] = types[type][1];
+				verloven[j]["verlof_naam"] = type + " uur";
+				verloven[j]["aantal_uur"] = Number(e[i].value);
 				
 				if ( types[type][1] == "K" || types[type][1] == "B" || types[type][1] == "D"|| types[type][1] == "L" || types[type][1] == "O" ) {
 					do {
-						verloven[j]["reden"] = prompt("Reden voor " + type + " op " + e[i].name);
-					} while (verloven[j]["reden"] == "" || verloven[j]["reden"] == " ");
+						verloven[j]["toelichting"] = prompt("Toelichting voor " + type + " op " + e[i].name);
+					} while (verloven[j]["toelichting"] == "" || verloven[j]["toelichting"] == " ");
 				}
 			}
 		}
 	}
 	console.debug(verloven);
+	
 }
 
 function createVerlofLijst(){
