@@ -64,7 +64,7 @@ http.onreadystatechange = function() {//Call a function when the state changes.
 		p['saldo_atv']	= document.querySelector("#response input[name='saldo_atv']").value;
 		p['stnd_uren']	= document.querySelector("#response input[name='stnd_uren']").value;
 		
-		if (!startVersturen){
+		if (startVersturen){
 			aanvragenverstuurd++;
 			stuurAanvraag(); //op naar de volgende
 		}
@@ -76,11 +76,13 @@ http.send();
 
 
 function stuurAanvraag(){
+	console.log("Start versturen");
 	startVersturen = true;
 	checkInputCalendar();
 	
 	if (aanvragenverstuurd >= verloven.length){
 		//klaar!
+		console.log("klaar met versturen");
 		errorInInput = false;
 		continueOnError = false;
 		startVersturen = false;
@@ -88,6 +90,7 @@ function stuurAanvraag(){
 	}
 	
 	if (errorInInput && !continueOnError) {
+		console.log("fouten gevonden");
 		if ( confirm("Er zijn fouten gevonden (rood gemarkeerd), deze worden genegeerd.\nVerder gaan?") ){
 			continueOnError = true;
 		} else {
@@ -98,7 +101,7 @@ function stuurAanvraag(){
 	}
 	
 	console.log("verstuur nr " + aanvragenverstuurd);
-	//return false;
+
 	for (var verlof in verloven[aanvragenverstuurd]){
 		p[verlof] = verloven[aanvragenverstuurd][verlof];
 	}
@@ -235,10 +238,10 @@ function addWeek( withDate , pos ){
 	if (thisWeek)
 		div.classList.add("current");
 	for (var i = 0; i < 7; i++){
-		var date = new Date();
+		var date = new Date(startDate.getTime());
 		date.setDate(startDate.getDate() + i);
 		var span  = document.createElement("span");
-		var txt = document.createTextNode( date.getDate() + "-" + date.getMonth() );
+		var txt = document.createTextNode( date.getDate() + "-" + (date.getMonth()+1) );
 		span.appendChild(txt);
 		div.appendChild(span);
 	}
@@ -256,11 +259,11 @@ function addWeek( withDate , pos ){
 			div.classList.add("current");
 		
 		for (var i = 0; i < 5; i++){
-			var date = new Date();
+			var date = new Date(startDate.getTime());
 			date.setDate(startDate.getDate() + i);
 			var input = document.createElement("input");
 			input.setAttribute("type", "text");
-			input.setAttribute("name", date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear() );
+			input.setAttribute("name", date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear() );
 			div.appendChild(input);
 		}
 		if(pos == "after")
@@ -359,7 +362,7 @@ HTMLElement.prototype.prepend = function(element) {
 	height: 1.5em;
 }
 .week{
-	width: 18em;
+	width: 22em;
 	display: inline-block;
 	background-color:#FFF;
 	height: 1.5em;
@@ -397,12 +400,12 @@ HTMLElement.prototype.prepend = function(element) {
 <div id="input">
 	<div id="calendar">
 		<div id="left">
-			<a href="#" onclick="javascript:addWeekBefore()"><</a>
+			<a href="#" onclick="javascript:addWeekBefore()" alt="Week ervoor toevoegen"><</a>
 		</div>
 		<div id="labels"></div>
 		<div id="wrapper"></div>
 		<div id="right">
-			<a href="#" onclick="javascript:addWeekAfter()">></a>
+			<a href="#" onclick="javascript:addWeekAfter()" alt="Week erna toevoegen">></a>
 		</div>
 	</div>
 
