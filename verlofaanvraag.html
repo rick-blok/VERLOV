@@ -46,10 +46,10 @@ var weeksAfterNow = 0;
 // Get user specific variables
 var http = new XMLHttpRequest();
 var urlget = "http://verlof/";
-http.open('GET', urlget, true);
+http.open("GET", urlget, true);
 http.onreadystatechange = function() {//Call a function when the state changes.
     if(http.readyState == 4 && http.status == 200) {
-        document.getElementById('response').innerHTML = http.responseText;
+        document.getElementById("response").innerHTML = http.responseText;
 		
 		// get variables for post
 		p['pagina'] 	= document.querySelector("#response input[name='pagina']").value;
@@ -71,7 +71,7 @@ http.onreadystatechange = function() {//Call a function when the state changes.
 	} else if (http.readyState == 4){
 		alert("er ging iets mis? \n" + http.status);
 	}
-}
+};
 http.send();
 
 
@@ -131,7 +131,7 @@ function checkInputCalendar(){
 				errorInInput = true;
 				continue;	
 			} else if (e[i].value == "" )
-				continue
+				continue;
 			e[i].classList.remove("error");
 			
 			var j = verloven.length;
@@ -162,11 +162,11 @@ function checkInputCalendar(){
 				verloven[j]["eind_tijd"] = "17:12";
 				verloven[j]["verlof_type"] = types[type][1];
 				verloven[j]["verlof_naam"] = type + " uur";
-				verloven[j]["aantal_uur"] = Number(e[i].value);
+				verloven[j]["aantal_uur"] = e[i].value;
 				
 				if ( types[type][1] == "K" || types[type][1] == "B" || types[type][1] == "D"|| types[type][1] == "L" || types[type][1] == "O" ) {
 					do {
-						verloven[j]["toelichting"] = prompt("Toelichting voor " + type + " op " + e[i].name);
+						verloven[j]["toelichting"] = prompt("Toelichting voor " + type + " op " + e[i].name, "");
 					} while (verloven[j]["toelichting"] == "" || verloven[j]["toelichting"] == " ");
 				}
 			}
@@ -206,25 +206,26 @@ function createVerlofLijst(){
 }
 
 function addWeekBefore(){
-	var d = new Date()
+	var d = new Date();
 	d.setDate(d.getDate() - ++weeksBeforeNow*7);
 	
 	addWeek(d, "before");
 }
 
 function addWeekAfter(){
-	var d = new Date()
+	var d = new Date();
 	d.setDate(d.getDate() + ++weeksAfterNow*7);
 	
 	addWeek(d, "after");
 }
 
-function addWeek( withDate = new Date(), pos="after"){
+//function addWeek( withDate = new Date(), pos="after" ){
+function addWeek( withDate , pos ){
 	//monday of specified week
 	var startDate = new Date(withDate.getFullYear(), withDate.getMonth(), withDate.getDate() - ((withDate.getUTCDay() + 6) % 7)); 
 	//monday of this week
 	var d = new Date();
-	var thisMonday = new Date(d.getFullYear(), d.getMonth(), d.getDate() - ((d.getUTCDay() + 6) % 7))
+	var thisMonday = new Date(d.getFullYear(), d.getMonth(), d.getDate() - ((d.getUTCDay() + 6) % 7));
 	var thisWeek = ( startDate.getTime() == thisMonday.getTime());
 	
 	// add dates to header
@@ -267,14 +268,6 @@ function addWeek( withDate = new Date(), pos="after"){
 		else
 			e.prepend(div);
 	}
-	
-	
-	/*
-	var node = document.createElement("LI");                 // Create a <li> node
-	var textnode = document.createTextNode("Water");         // Create a text node
-	node.appendChild(textnode);                              // Append the text to <li>
-	document.getElementById("myList").appendChild(node);     // Append <li> to <ul> with id="myList"
-	*/
 }
 
 function getWeekNumber(d) {
@@ -293,10 +286,21 @@ function getWeekNumber(d) {
 
 window.onload = function (){
 	createVerlofLijst();
-	addWeek();
+	var d = new Date();
+	addWeek(d, "after");
 	addWeekBefore();
 	addWeekAfter();
-}
+};
+
+//IE compatability
+HTMLElement = typeof(HTMLElement) != 'undefined' ? HTMLElement : Element;
+HTMLElement.prototype.prepend = function(element) {
+    if (this.firstChild) {
+        return this.insertBefore(element, this.firstChild);
+    } else {
+        return this.appendChild(element);
+    }
+};
 
 //-->
 </script>
@@ -324,12 +328,14 @@ window.onload = function (){
 #left {
 	float:left;
 	display: table-cell;
-	width: 2em;
+	vertical-align: middle;
 	display: inline-block;
+	font-size: 5em;
 }
 #right{
 	float: right;
-	width: 2em;
+	font-size: 5em;
+	vertical-align: middle;
 	display: inline-block;
 }
 #wrapper {
@@ -391,19 +397,19 @@ window.onload = function (){
 <div id="input">
 	<div id="calendar">
 		<div id="left">
-			<a href="#" onclick="javascript:addWeekBefore()">-</a>
+			<a href="#" onclick="javascript:addWeekBefore()"><</a>
 		</div>
 		<div id="labels"></div>
 		<div id="wrapper"></div>
 		<div id="right">
-			<a href="#" onclick="javascript:addWeekAfter()">+</a>
+			<a href="#" onclick="javascript:addWeekAfter()">></a>
 		</div>
 	</div>
 
 	<a href="#" onclick="javascript:checkInputCalendar();">Check Input</a><br>
-	<a href="#" onclick="javascript:startVersturen=true;stuurAanvraag();">doe aanvraag</a>
+	<a href="#" onclick="javascript:stuurAanvraag();">doe aanvraag</a>
 </div>
-<div id="response">leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br>leeg<br></div>
+<div id="response"></div>
 
 </body>
 </html>
