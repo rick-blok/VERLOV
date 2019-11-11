@@ -195,7 +195,6 @@ function createVerlofLijst(){
 		e.appendChild(div);
 	}
 	
-	
 	var e =  document.getElementById("wrapper");
 
 	var div = document.createElement("div");
@@ -215,6 +214,12 @@ function addWeekBefore(){
 	addWeek(d, "before");
 }
 
+function add5WeeksBefore(){
+	for (var i = 0; i < 5 ; i++) {
+		addWeekBefore();
+	}
+}
+
 function addWeekAfter(){
 	var d = new Date();
 	d.setDate(d.getDate() + ++weeksAfterNow*7);
@@ -222,7 +227,12 @@ function addWeekAfter(){
 	addWeek(d, "after");
 }
 
-//function addWeek( withDate = new Date(), pos="after" ){
+function add5WeeksAfter(){
+	for (var i = 0; i < 5 ; i++) {
+		addWeekAfter();
+	}
+}
+
 function addWeek( withDate , pos ){
 	//monday of specified week
 	var startDate = new Date(withDate.getFullYear(), withDate.getMonth(), withDate.getDate() - ((withDate.getUTCDay() + 6) % 7)); 
@@ -250,6 +260,8 @@ function addWeek( withDate , pos ){
 	else
 		e.prepend(div);
 	
+	div.scrollIntoView();
+	
 	//add inputboxes
 	for (var type in types){
 		var e = document.getElementById(type);
@@ -271,6 +283,8 @@ function addWeek( withDate , pos ){
 		else
 			e.prepend(div);
 	}
+	
+	
 }
 
 function getWeekNumber(d) {
@@ -400,12 +414,14 @@ HTMLElement.prototype.prepend = function(element) {
 <div id="input">
 	<div id="calendar">
 		<div id="left">
+			<a href="#" onclick="javascript:add5WeeksBefore()" alt="5 Weken ervoor toevoegen"><<</a>
 			<a href="#" onclick="javascript:addWeekBefore()" alt="Week ervoor toevoegen"><</a>
 		</div>
 		<div id="labels"></div>
 		<div id="wrapper"></div>
 		<div id="right">
 			<a href="#" onclick="javascript:addWeekAfter()" alt="Week erna toevoegen">></a>
+			<a href="#" onclick="javascript:add5WeeksAfter()" alt="5 Weken erna toevoegen">>></a>
 		</div>
 	</div>
 
