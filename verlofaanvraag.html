@@ -141,7 +141,7 @@ function checkInputCalendar(){
 			verloven[j] = [];
 			if (types[type][0] != "-" && Number(e[i].value) % 4 == 0){
 				//dag
-				if ( (j > 0 && verloven[j-1]["verlof_type"][0] == types[type][0] && verloven[j-1]["eind_tijd"] == "17:12" ) ){
+				if ( (j > 0 && verloven[j-1]["verlof_type"][0] == types[type][0] && verloven[j-1]["eind_tijd"] == "17:12" && Number(e[i-1].value) != 0 ) ){
 					// ga verder met de vorige
 					verloven[j-1]["eind_datum"] = e[i].name;
 					verloven[j-1]["eind_tijd"] = Number(e[i].value) == 4 ? "12:30" : "17:12";
