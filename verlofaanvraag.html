@@ -143,7 +143,7 @@ function checkInputCalendar(){
 			verloven[j] = [];
 			if (types[type][0] != "-" && Number(e[i].value) % 4 == 0){
 				//dag
-				if ( (j > 0 && verloven[j-1]["verlof_type"][0] == types[type][0] && verloven[j-1]["eind_tijd"] == "17:12" ) ){
+				if ( (j > 0 && verloven[j-1]["verlof_type"][0] == types[type][0] && verloven[j-1]["eind_tijd"] == "17:12" && Number(e[i-1].value) != 0 ) ){
 					// ga verder met de vorige
 					verloven[j-1]["eind_datum"] = e[i].name;
 					verloven[j-1]["eind_tijd"] = Number(e[i].value) == 4 ? "12:30" : "17:12";
@@ -413,6 +413,10 @@ HTMLElement.prototype.prepend = function(element) {
 	width: 4em;
 	height: 1.5em;
 }
+a{
+	cursor:pointer;
+}
+
 //-->
 </style>
 <body>
@@ -420,21 +424,21 @@ HTMLElement.prototype.prepend = function(element) {
 <form id="input">
 	<div id="calendar">
 		<div id="left">
-			<a href="#" onclick="javascript:add5WeeksBefore()" alt="5 Weken ervoor toevoegen"><<</a>
-			<a href="#" onclick="javascript:addWeekBefore()" alt="Week ervoor toevoegen"><</a>
+			<a onclick="javascript:add5WeeksBefore()" alt="5 Weken ervoor toevoegen"><<</a>
+			<a onclick="javascript:addWeekBefore()" alt="Week ervoor toevoegen"><</a>
 		</div>
 		<div id="labels"></div>
 		<div id="wrapper"></div>
 		<div id="right">
-			<a href="#" onclick="javascript:addWeekAfter()" alt="Week erna toevoegen">></a>
-			<a href="#" onclick="javascript:add5WeeksAfter()" alt="5 Weken erna toevoegen">>></a>
+			<a onclick="javascript:addWeekAfter()" alt="Week erna toevoegen">></a>
+			<a onclick="javascript:add5WeeksAfter()" alt="5 Weken erna toevoegen">>></a>
 		</div>
 	</div>
-
-	<a href="#" onclick="javascript:clearInputCalendar();">Formulier Wissen</a><br>
-	<a href="#" onclick="javascript:checkInputCalendar();">Check Input</a><br>
-	<a href="#" onclick="javascript:stuurAanvraag();">doe aanvraag</a>
+	<a onclick="javascript:clearInputCalendar();">Formulier Wissen</a><br>
+	<a onclick="javascript:checkInputCalendar();">Check Input</a><br>
+	<a onclick="javascript:stuurAanvraag();">doe aanvraag</a>
 </form>
+
 <div id="response"></div>
 
 </body>
