@@ -1,0 +1,86 @@
+#input{
+	/*height: 15em;*/
+	background-color: #DDD;
+	padding: 10px;
+	/*top:0;
+	left:0;
+	right:0;
+	position:absolute;*/
+}
+#response{
+  /* overflow-x:auto;
+   top:15em; 
+   left:0;
+   right:0;
+   bottom:0;
+   position:absolute;*/
+}
+#calendar{
+	display: table-row;
+}
+#left, #right{
+	display: table-cell;
+	vertical-align: middle;
+	font-size: 5em;
+	padding: 10px;
+}
+
+#wrapper {
+	display: inline-block;
+	overflow-x: scroll;
+	width: 1000px;
+	white-space: nowrap;
+}
+#wrapper div{
+	height: 1.5em;
+}
+
+#header .week span{
+	width: 2.9em;
+	display: inline-block;
+	text-align: center;
+	font-size: small;
+	padding: 0;
+	margin: 0;
+	border: 1px solid;
+	height: 1.5em;
+}
+.week{
+	width: 22em;
+	display: inline-block;
+	background-color:#FFF;
+	height: 1.5em;
+}
+.week:nth-child(2n){
+	background-color:#DDD;
+}
+.week input{
+	width:2.85em;
+	padding: 0;
+	margin: 0;
+	border: 1px solid;
+	height: 1.5em;
+}
+
+.current{
+	background-color: #DDF;
+}
+.error{
+	background-color: #FCC;
+}
+#labels{
+	display: inline-block;
+	width: 8em;
+	vertical-align: top
+}
+.label{
+	width: 4em;
+	height: 1.5em;
+}
+#calendar a{
+	cursor:pointer;
+}
+
+.noShow{
+	display: none;
+}
