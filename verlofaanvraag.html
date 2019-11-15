@@ -86,6 +86,8 @@ function stuurAanvraag(){
 		errorInInput = false;
 		continueOnError = false;
 		startVersturen = false;
+		aanvragenverstuurd = 0;
+		clearInputCalendar();
 		return;
 	}
 	
@@ -177,6 +179,10 @@ function checkInputCalendar(){
 	}
 	console.debug(verloven);
 	
+}
+
+function clearInputCalendar(){
+	document.getElementById("input").reset();
 }
 
 function createVerlofLijst(){
@@ -415,7 +421,7 @@ a{
 </style>
 <body>
 
-<div id="input">
+<form id="input">
 	<div id="calendar">
 		<div id="left">
 			<a onclick="javascript:add5WeeksBefore()" alt="5 Weken ervoor toevoegen"><<</a>
@@ -428,10 +434,11 @@ a{
 			<a onclick="javascript:add5WeeksAfter()" alt="5 Weken erna toevoegen">>></a>
 		</div>
 	</div>
-
+	<a onclick="javascript:clearInputCalendar();">Formulier Wissen</a><br>
 	<a onclick="javascript:checkInputCalendar();">Check Input</a><br>
 	<a onclick="javascript:stuurAanvraag();">doe aanvraag</a>
-</div>
+</form>
+
 <div id="response"></div>
 
 </body>
