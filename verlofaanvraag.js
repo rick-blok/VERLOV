@@ -81,6 +81,8 @@ function stuurAanvraag(){
 		errorInInput = false;
 		continueOnError = false;
 		startVersturen = false;
+		aanvragenverstuurd = 0;
+		clearInputCalendar();
 		return;
 	}
 	
@@ -172,6 +174,10 @@ function checkInputCalendar(){
 	}
 	console.debug(verloven);
 	
+}
+
+function clearInputCalendar(){
+	document.getElementById("input").reset();
 }
 
 function createVerlofLijst(){

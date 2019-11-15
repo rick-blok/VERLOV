@@ -13,7 +13,7 @@ var HTML_PAGE_VERSION = 1;
 <link rel="stylesheet" type="text/css" href="style.css">
 <body>
 <div id="message" class="noShow"></div>
-<div id="input">
+<form id="input">
 	<div id="calendar">
 		<div id="left">
 			<a onclick="javascript:add5WeeksBefore()" alt="5 Weken ervoor toevoegen"><<</a>
@@ -27,9 +27,10 @@ var HTML_PAGE_VERSION = 1;
 		</div>
 	</div>
 
+	<input type="reset" value="Formulier wissen">
 	<input type="button" onclick="javascript:checkInputCalendar();" value="Check Input">
 	<input type="button" onclick="javascript:stuurAanvraag();"  value="Doe aanvraag">
-</div>
+</form>
 <div id="response"></div>
 
 </body>
