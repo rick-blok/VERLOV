@@ -84,3 +84,18 @@
 .noShow{
 	display: none;
 }
+
+#help{
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-size: 4em;
+	padding-right: 10px;
+}
+#settingbutton{
+	position: absolute;
+	top: 1em;
+	right: 0;
+	font-size: 4em;
+	padding-right: 10px;
+}

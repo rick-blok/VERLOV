@@ -308,6 +308,8 @@ window.onload = function (){
 	addWeek(d, "after");
 	addWeekBefore();
 	addWeekAfter();
+	
+	document.getElementById("settingbutton").classList.add("noShow");
 };
 
 //IE compatability
