@@ -10,7 +10,7 @@ Met VERLOV kunnen alle verloven in één overzicht ingevuld worden en in een kee
   - Bij werkweken van minder dan 5 dagen en een vakantie van meerdere weken, ook op de niet-werkdagen 8u invullen om één lange aanvraag te doen in plaats van meerdere van een week.
 
 ## Instructie
-Download bestanden op een lokale schijf of een gemapte netwerkschijf. Netwerkschijven beginnend met een domeinnaam werken niet in verband met browserbeveiligingen.
+Download 'verlofaanvraag.html' op een lokale schijf of een gemapte netwerkschijf. Netwerkschijven beginnend met een domeinnaam werken niet in verband met browserbeveiligingen.
 
 ## VERLOV?
 VAAN Encapsulatie- en ReïntegratieLaag voor Overzichtelijke Verlofaanvragen
