@@ -65,6 +65,8 @@ function processResponse(){
 		} else {
 			messageBox.classList.add("noShow");
 		}
+		// informatie div staat in de weg
+		document.querySelector("#response #informatie").style.top = "auto";
 	} else if (http.readyState == 4){
 		messageBox.getElementsByTagName("p")[aanvragenverstuurd].innerHTML += " FOUT: " + http.status + " " + http.statusText;
 		//alert("er ging iets mis? \n" + http.status);
@@ -74,11 +76,12 @@ function processResponse(){
 }
 
 function stuurAanvraag(){
-	console.log("Start versturen");
-	startVersturen = true;
-	checkInputCalendar();
-	
-	if (aanvragenverstuurd >= verloven.length){
+	if (aanvragenverstuurd == 0){
+		console.log("Start versturen");
+		startVersturen = true;
+		checkInputCalendar();
+		messageBox.getElementsByTagName("h1")[0].innerHTML = "Aanvragen versturen";
+	} else if (aanvragenverstuurd >= verloven.length){
 		//klaar!
 		console.log("klaar met versturen");
 		errorInInput = false;
@@ -86,7 +89,7 @@ function stuurAanvraag(){
 		startVersturen = false;
 		aanvragenverstuurd = 0;
 		clearInputCalendar();
-		messageBox.getElementsByTagName("p")[aanvragenverstuurd].innerHTML += "KLAAR!";
+		messageBox.getElementsByTagName("p")[aanvragenverstuurd].innerHTML += "<br>KLAAR!";
 		return;
 	}
 	
@@ -326,6 +329,11 @@ window.onload = function (){
 	addWeekBefore();
 	addWeekAfter();
 	
+	// show message
+	messageBox = document.getElementById("message");
+	messageBox.classList.remove("noShow");
+	messageBox.innerHTML = "<h1>Data verzamelen</h1><p>" + urlget + " openen.</p><input type=\"button\" onclick=\"javascript:messageBox.classList.add('noShow');\"  value=\"Sluiten\">";
+	
 	// Get user specific variables
 	var urlget = "http://verlof/";
 	http.open("GET", urlget, true);
@@ -333,9 +341,6 @@ window.onload = function (){
 	http.send();
 	
 	document.getElementById("settingbutton").classList.add("noShow");
-	messageBox = document.getElementById("message");
-	messageBox.classList.remove("noShow");
-	messageBox.innerHTML = "<h1>Data verzamelen</h1><p>" + urlget + " openen.</p><input type=\"button\" onclick=\"javascript:messageBox.classList.add('noShow');\"  value=\"Sluiten\">";
 };
 
 //IE compatability
