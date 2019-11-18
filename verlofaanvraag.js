@@ -38,11 +38,10 @@ var verloven = [];
 var weeksBeforeNow = 0;
 var weeksAfterNow = 0;
 
-// Get user specific variables
 var http = new XMLHttpRequest();
-var urlget = "http://verlof/";
-http.open("GET", urlget, true);
-http.onreadystatechange = function() {//Call a function when the state changes.
+var messageBox;
+
+function processResponse(){
     if(http.readyState == 4 && http.status == 200) {
         document.getElementById("response").innerHTML = http.responseText;
 		
@@ -60,15 +59,19 @@ http.onreadystatechange = function() {//Call a function when the state changes.
 		p['stnd_uren']	= document.querySelector("#response input[name='stnd_uren']").value;
 		
 		if (startVersturen){
+			messageBox.getElementsByTagName("p")[aanvragenverstuurd].innerHTML += " OK";
 			aanvragenverstuurd++;
 			stuurAanvraag(); //op naar de volgende
+		} else {
+			messageBox.classList.add("noShow");
 		}
 	} else if (http.readyState == 4){
-		alert("er ging iets mis? \n" + http.status);
+		messageBox.getElementsByTagName("p")[aanvragenverstuurd].innerHTML += " FOUT: " + http.status + " " + http.statusText;
+		//alert("er ging iets mis? \n" + http.status);
+	} else { // laat wat actie zien
+		messageBox.getElementsByTagName("p")[aanvragenverstuurd].innerHTML += ".";
 	}
-};
-http.send();
-
+}
 
 function stuurAanvraag(){
 	console.log("Start versturen");
@@ -83,6 +86,7 @@ function stuurAanvraag(){
 		startVersturen = false;
 		aanvragenverstuurd = 0;
 		clearInputCalendar();
+		messageBox.getElementsByTagName("p")[aanvragenverstuurd].innerHTML += "KLAAR!";
 		return;
 	}
 	
@@ -172,8 +176,23 @@ function checkInputCalendar(){
 			}
 		}
 	}
+	messageBox.innerHTML = "<H1>Controleer input</H1>";
+	for (var i=0; i<verloven.length ; i++){
+		messageBox.innerHTML += 
+			"<p>verlof " + i + ": "
+			+ verloven[i]["verlof_type"] + " ("
+			+ verloven[i]["verlof_naam"] + ") "
+			+ verloven[i]["begin_datum"] + " "
+			+ verloven[i]["begin_tijd"] + " - "
+			+ verloven[i]["eind_datum"] + " "
+			+ verloven[i]["eind_tijd"] + " ("
+			+ verloven[i]["aantal_uur"] + " uur)";
+	}
+	messageBox.innerHTML += "<p></p>";
+	messageBox.innerHTML += "<input type=\"button\" onclick=\"javascript:messageBox.classList.add('noShow');\"  value=\"Sluiten\"> ";
+	messageBox.innerHTML +=  "<input type=\"button\" onclick=\"javascript:stuurAanvraag();\"  value=\"Doe aanvraag\"> ";
+	messageBox.classList.remove("noShow");
 	console.debug(verloven);
-	
 }
 
 function clearInputCalendar(){
@@ -284,8 +303,6 @@ function addWeek( withDate , pos ){
 		else
 			e.prepend(div);
 	}
-	
-	
 }
 
 function getWeekNumber(d) {
@@ -309,7 +326,16 @@ window.onload = function (){
 	addWeekBefore();
 	addWeekAfter();
 	
+	// Get user specific variables
+	var urlget = "http://verlof/";
+	http.open("GET", urlget, true);
+	http.onreadystatechange = processResponse;
+	http.send();
+	
 	document.getElementById("settingbutton").classList.add("noShow");
+	messageBox = document.getElementById("message");
+	messageBox.classList.remove("noShow");
+	messageBox.innerHTML = "<h1>Data verzamelen</h1><p>" + urlget + " openen.</p><input type=\"button\" onclick=\"javascript:messageBox.classList.add('noShow');\"  value=\"Sluiten\">";
 };
 
 //IE compatability
