@@ -44,6 +44,10 @@ var messageBox;
 function processResponse(){
     if(http.readyState == 4 && http.status == 200) {
         document.getElementById("response").innerHTML = http.responseText;
+		var scripts = document.getElementById("response").getElementsByTagName("script");
+		for (var i; i < scripts.length ; i++){
+			eval(scripts[i].innerHTML);
+		}
 		
 		// get variables for post
 		p['pagina'] 	= document.querySelector("#response input[name='pagina']").value;
@@ -74,6 +78,9 @@ function processResponse(){
 		messageBox.getElementsByTagName("p")[aanvragenverstuurd].innerHTML += ".";
 	}
 }
+
+//om een of andere reden komt deze niet mee...
+function f_toon_informatie(p_soort){}
 
 function stuurAanvraag(){
 	if (aanvragenverstuurd == 0){
@@ -329,13 +336,14 @@ window.onload = function (){
 	addWeekBefore();
 	addWeekAfter();
 	
+	var urlget = "http://verlof/";
+	
 	// show message
 	messageBox = document.getElementById("message");
 	messageBox.classList.remove("noShow");
 	messageBox.innerHTML = "<h1>Data verzamelen</h1><p>" + urlget + " openen.</p><input type=\"button\" onclick=\"javascript:messageBox.classList.add('noShow');\"  value=\"Sluiten\">";
 	
 	// Get user specific variables
-	var urlget = "http://verlof/";
 	http.open("GET", urlget, true);
 	http.onreadystatechange = processResponse;
 	http.send();
