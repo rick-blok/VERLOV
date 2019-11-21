@@ -44,10 +44,18 @@ var messageBox;
 function processResponse(){
     if(http.readyState == 4 && http.status == 200) {
         document.getElementById("response").innerHTML = http.responseText;
+		
+		//reattach scripts to get them working
 		var scripts = document.getElementById("response").getElementsByTagName("script");
-		for (var i; i < scripts.length ; i++){
-			eval(scripts[i].innerHTML);
+		var l = scripts.length;
+		for (var i=0 ; i < l ; i++){
+			var newScript = document.createElement("script");
+			var contents = document.createTextNode(scripts[i].innerHTML);
+			newScript.appendChild( contents );
+			document.getElementById("response").appendChild( newScript );
 		}
+		// informatie div staat in de weg
+		document.querySelector("#response #informatie").style.top = "auto";
 		
 		// get variables for post
 		p['pagina'] 	= document.querySelector("#response input[name='pagina']").value;
@@ -69,8 +77,6 @@ function processResponse(){
 		} else {
 			messageBox.classList.add("noShow");
 		}
-		// informatie div staat in de weg
-		document.querySelector("#response #informatie").style.top = "auto";
 	} else if (http.readyState == 4){
 		messageBox.getElementsByTagName("p")[aanvragenverstuurd].innerHTML += " FOUT: " + http.status + " " + http.statusText;
 		//alert("er ging iets mis? \n" + http.status);
