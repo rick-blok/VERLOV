@@ -94,6 +94,7 @@ function stuurAanvraag(){
 		startVersturen = true;
 		checkInputCalendar();
 		messageBox.getElementsByTagName("h1")[0].innerHTML = "Aanvragen versturen";
+		messageBox.getElementsByTagName("button")[1].outerHTML = "";
 	} else if (aanvragenverstuurd >= verloven.length){
 		//klaar!
 		console.log("klaar met versturen");
