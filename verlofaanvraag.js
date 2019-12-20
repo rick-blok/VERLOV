@@ -100,9 +100,9 @@ function stuurAanvraag(){
 		errorInInput = false;
 		continueOnError = false;
 		startVersturen = false;
+		messageBox.getElementsByTagName("p")[aanvragenverstuurd].innerHTML += "<br>KLAAR!";
 		aanvragenverstuurd = 0;
 		clearInputCalendar();
-		messageBox.getElementsByTagName("p")[aanvragenverstuurd].innerHTML += "<br>KLAAR!";
 		return;
 	}
 	
