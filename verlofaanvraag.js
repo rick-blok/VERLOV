@@ -217,13 +217,20 @@ function clearInputCalendar(){
 }
 
 function createVerlofLijst(){
-	var e =  document.getElementById("labels");
+	var e = document.getElementById("labels");
+	
+	var div2 = document.createElement("div");
+	var txt = document.createTextNode( "-" );
+	div2.classList.add("label");
+	div2.appendChild(txt);
+	e.appendChild(div2);
 	
 	var div = document.createElement("div");
 	var txt = document.createTextNode( "-" );
 	div.classList.add("label");
 	div.appendChild(txt);
 	e.appendChild(div);
+	
 	for (var type in types){
 		var div = document.createElement("div");
 		var txt = document.createTextNode( type );
@@ -234,9 +241,14 @@ function createVerlofLijst(){
 	
 	var e =  document.getElementById("wrapper");
 
+	var div2 = document.createElement("div");
+	div2.setAttribute("id", "weeknrs");
+	e.appendChild(div2);
+	
 	var div = document.createElement("div");
 	div.setAttribute("id", "header");
 	e.appendChild(div);
+	
 	for (var type in types){
 		var div = document.createElement("div");
 		div.setAttribute("id", type);
@@ -299,6 +311,19 @@ function addWeek( withDate , pos ){
 	
 	div.scrollIntoView();
 	
+	// add weeknumbers
+	var e = document.getElementById("weeknrs");
+	var div2 = document.createElement("div");
+	div2.classList.add("week"); 
+	var txt = document.createTextNode( getWeekNumber(date) );
+	div2.appendChild(txt);
+	if (thisWeek)
+		div2.classList.add("current");
+	if(pos == "after")
+		e.appendChild(div2);
+	else
+		e.prepend(div2);
+	
 	//add inputboxes
 	for (var type in types){
 		var e = document.getElementById(type);
@@ -332,8 +357,8 @@ function getWeekNumber(d) {
     var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
     // Calculate full weeks to nearest Thursday
     var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
-    // Return array of year and week number
-    return [d.getUTCFullYear(), weekNo];
+    // Return string of year and week number
+    return d.getUTCFullYear() +" week "+ weekNo;
 }
 
 window.onload = function (){
